@@ -1,0 +1,1529 @@
+/* ============================================================
+   ONG Mãos Solidárias Estilo "Terra & Afeto" (v3 · Dark)
+   ------------------------------------------------------------
+   Baseado na v2, com paleta escura e quente (modo noturno)
+   para reduzir fadiga visual. Mesma identidade, menos brilho.
+
+   Changelog v3:
+   1. Paleta escura: fundo espresso, superfícies elevadas,
+      texto creme quente, sombras mais profundas.
+   2. Sombras recalibradas para fundo escuro.
+   3. Seletores de data, estados de erro e detalhes ajustados
+      para contraste em tema escuro.
+   4. Impressão continua forçando tema claro (economia de tinta).
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap");
+
+/* ---------- Custom Properties ---------- */
+:root {
+    /* Paleta escura "Terra & Afeto" */
+    --terracotta: #d4694a;
+    /* levemente mais claro p/ contraste em fundo escuro */
+    --terracotta-dark: #b8552f;
+    --terracotta-light: #f0926d;
+    --terracotta-ghost: rgba(212, 105, 74, 0.14);
+    --chocolate: #f3e9db;
+    /* vira cor de TEXTO principal (creme quente) */
+    --chocolate-soft: #cbb9a5;
+    /* texto secundário */
+    --cream: #1a120c;
+    /* fundo base (espresso) */
+    --cream-deep: #241a11;
+    /* superfície elevada 1 */
+    --gold: #d4a843;
+    --gold-muted: #c9a96e;
+    --sage: #59684f;
+    /* sage escurecido */
+    --sage-light: #a3b296;
+    --white: #2c2014;
+    /* superfície elevada 2 (cards, header) */
+    --black: #120c07;
+    --error: #e07a5f;
+
+    /* Superfícies auxiliares */
+    --input-bg: #20160d;
+    --input-bg-focus: #2b1f13;
+    --border-subtle: rgba(243, 233, 219, 0.09);
+
+    --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --font-body: "Outfit", system-ui, -apple-system, sans-serif;
+
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+    --space-2xl: 6rem;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-pill: 50px;
+
+    /* Sombras recalibradas para fundo escuro */
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.42);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.55);
+    --focus-ring: 0 0 0 4px rgba(240, 146, 109, 0.22);
+
+    --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --header-height: 90px;
+
+    color-scheme: dark;
+    accent-color: var(--terracotta);
+}
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--header-height);
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    color: var(--chocolate);
+    background-color: var(--cream);
+    line-height: 1.7;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+}
+
+/* Textura de grão sutil (um pouco mais visível no tema escuro) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+}
+
+main {
+    flex: 1;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: var(--terracotta-light);
+    text-decoration: none;
+    text-underline-offset: 3px;
+    transition: color var(--transition-base);
+}
+
+a:hover {
+    color: var(--terracotta);
+}
+
+:focus-visible {
+    outline: 2px solid var(--terracotta-light);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+::selection {
+    background: var(--terracotta);
+    color: var(--cream);
+}
+
+/* ---------- Typography ---------- */
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--chocolate);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+}
+
+h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    letter-spacing: -0.01em;
+}
+
+h3 {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+}
+
+p {
+    max-width: 65ch;
+    overflow-wrap: break-word;
+}
+
+/* ---------- Header ---------- */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    background: rgba(26, 18, 12, 0.82);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    header {
+        background: var(--white);
+    }
+}
+
+header img {
+    height: 48px;
+    width: auto;
+    transition: transform var(--transition-bounce);
+}
+
+header img:hover {
+    transform: scale(1.05);
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ---------- Menu Toggle (checkbox hack — sem JavaScript) ---------- */
+.menu-toggle {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.menu-toggle-label {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    cursor: pointer;
+    z-index: 101;
+}
+
+.menu-toggle-label span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--cream);
+    border-radius: var(--radius-pill);
+    transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+/* ---------- Dropdown de submenu (desktop: hover/focus) ---------- */
+.tem-submenu {
+    position: relative;
+}
+
+.tem-submenu .submenu {
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--cream-deep);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-xs);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+        opacity var(--transition-base),
+        transform var(--transition-base),
+        visibility var(--transition-base);
+}
+
+.tem-submenu:hover .submenu,
+.tem-submenu:focus-within .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.submenu li a {
+    display: block;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    min-height: auto;
+}
+
+header nav a {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--chocolate-soft);
+    padding: var(--space-xs) 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    transition: color var(--transition-base);
+}
+
+header nav a::after {
+    content: "";
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--terracotta);
+    border-radius: 1px;
+    transition: width var(--transition-base);
+}
+
+header nav a:hover,
+header nav a[aria-current="page"] {
+    color: var(--terracotta-light);
+}
+
+header nav a:hover::after,
+header nav a[aria-current="page"]::after {
+    width: 100%;
+}
+
+/* ---------- Main ---------- */
+main {
+    padding: var(--space-xl) var(--space-lg);
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ---------- Sections ---------- */
+section {
+    margin-bottom: var(--space-2xl);
+    animation: fadeUp 0.6s ease-out both;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+}
+
+section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+section:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+section:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section h2 {
+    margin-bottom: var(--space-md);
+    position: relative;
+    display: inline-block;
+}
+
+section h2::before {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--terracotta);
+    border-radius: 2px;
+    transition: width var(--transition-base);
+}
+
+section:hover h2::before {
+    width: 64px;
+}
+
+section p {
+    margin-bottom: var(--space-sm);
+    color: var(--chocolate-soft);
+}
+
+/* ---------- Hero / Quem Somos ---------- */
+#quem-somos img {
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    margin-bottom: var(--space-md);
+    box-shadow: var(--shadow-card);
+}
+
+#quem-somos p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* ---------- Missão ---------- */
+#missao {
+    background: linear-gradient(160deg, #332216 0%, #241708 100%);
+    color: var(--chocolate);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(212, 105, 74, 0.18);
+}
+
+#missao::before {
+    content: "\201C";
+    position: absolute;
+    top: -20px;
+    right: 30px;
+    font-family: var(--font-display);
+    font-size: 12rem;
+    font-weight: 700;
+    color: rgba(212, 105, 74, 0.16);
+    line-height: 1;
+    pointer-events: none;
+}
+
+#missao h2 {
+    color: var(--chocolate);
+}
+
+#missao h2::before {
+    background: var(--terracotta-light);
+}
+
+#missao p {
+    color: #ddcdba;
+    font-size: 1.15rem;
+    max-width: 55ch;
+    position: relative;
+    z-index: 1;
+}
+
+/* ---------- Chamada para Ação ---------- */
+#chamada-acao {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+    background: linear-gradient(135deg,
+            rgba(212, 105, 74, 0.1) 0%,
+            rgba(212, 168, 67, 0.07) 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(212, 105, 74, 0.22);
+}
+
+#chamada-acao h2 {
+    display: block;
+}
+
+#chamada-acao h2::before {
+    display: none;
+}
+
+#chamada-acao p {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--space-lg);
+    font-size: 1.1rem;
+}
+
+.contador-cadastros {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-pill);
+    background: rgba(122, 156, 122, 0.12);
+    color: var(--sage-light);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+}
+
+#chamada-acao a {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin: 0 var(--space-xs);
+    transition:
+        transform var(--transition-bounce),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+}
+
+#chamada-acao a:first-of-type {
+    background: var(--terracotta);
+    color: #fff8f0;
+    box-shadow: 0 4px 16px rgba(212, 105, 74, 0.35);
+}
+
+#chamada-acao a:first-of-type:hover {
+    background: var(--terracotta-dark);
+    color: #fff8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212, 105, 74, 0.45);
+}
+
+#chamada-acao a:last-of-type {
+    background: transparent;
+    color: var(--terracotta-light);
+    border: 2px solid var(--terracotta);
+}
+
+#chamada-acao a:last-of-type:hover {
+    background: var(--terracotta);
+    color: #fff8f0;
+    transform: translateY(-2px);
+}
+
+/* ---------- Contato / Aside ---------- */
+aside {
+    background: var(--white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    border-left: 4px solid var(--gold);
+}
+
+aside h3 {
+    margin-bottom: var(--space-sm);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--gold-muted);
+}
+
+address {
+    font-style: normal;
+}
+
+address p {
+    margin-bottom: var(--space-xs);
+    font-size: 0.95rem;
+}
+
+address a {
+    color: var(--chocolate);
+    border-bottom: 1px dashed var(--terracotta-light);
+    transition:
+        color var(--transition-base),
+        border-color var(--transition-base);
+}
+
+address a:hover {
+    color: var(--terracotta-light);
+    border-color: var(--terracotta-light);
+}
+
+/* ---------- Footer ---------- */
+footer {
+    text-align: center;
+    padding: var(--space-lg);
+    background: var(--black);
+    color: var(--chocolate-soft);
+    font-size: 0.85rem;
+    margin-top: auto;
+    letter-spacing: 0.02em;
+}
+
+footer p {
+    max-width: none;
+}
+
+/* ============================================================
+   PROJETOS PAGE
+   ============================================================ */
+
+#projetos-andamento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--space-lg);
+}
+
+#projetos-andamento h2 {
+    grid-column: 1 / -1;
+}
+
+#projetos-andamento article {
+    grid-column: span 4;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    transition:
+        transform var(--transition-bounce),
+        box-shadow var(--transition-base);
+}
+
+#projetos-andamento article:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+#projetos-andamento article img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+#projetos-andamento article:hover img {
+    transform: scale(1.03);
+}
+
+#projetos-andamento article h3 {
+    padding: var(--space-md) var(--space-md) var(--space-xs);
+    color: var(--terracotta-light);
+}
+
+#projetos-andamento article p {
+    padding: 0 var(--space-md) var(--space-md);
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+/* Como Doar */
+#como-doar {
+    background: var(--sage);
+    color: #f6f1e7;
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+#como-doar h2 {
+    color: #f6f1e7;
+}
+
+#como-doar h2::before {
+    background: #f6f1e7;
+}
+
+#como-doar p {
+    color: rgba(246, 241, 231, 0.85);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--space-md);
+}
+
+#como-doar a {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background: #f6f1e7;
+    color: var(--sage);
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition:
+        transform var(--transition-bounce),
+        box-shadow var(--transition-base);
+}
+
+#como-doar a:hover {
+    color: var(--sage);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Seja Voluntário */
+#seja-voluntario ul {
+    list-style: none;
+    margin-bottom: var(--space-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+#seja-voluntario li {
+    background: var(--white);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--chocolate-soft);
+    box-shadow: var(--shadow-soft);
+    transition:
+        transform var(--transition-bounce),
+        box-shadow var(--transition-base);
+}
+
+#seja-voluntario li:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+}
+
+#seja-voluntario a {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background: var(--terracotta);
+    color: #fff8f0;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(212, 105, 74, 0.35);
+    transition:
+        transform var(--transition-bounce),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+}
+
+#seja-voluntario a:hover {
+    background: var(--terracotta-dark);
+    color: #fff8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212, 105, 74, 0.45);
+}
+
+/* FAQ */
+#faq details {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    transition: box-shadow var(--transition-base);
+}
+
+#faq details:hover {
+    box-shadow: var(--shadow-card);
+}
+
+#faq summary {
+    padding: var(--space-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--chocolate);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    min-height: 44px;
+    transition: color var(--transition-base);
+}
+
+#faq summary::-webkit-details-marker {
+    display: none;
+}
+
+#faq summary::after {
+    content: "+";
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--terracotta-light);
+    transition: transform var(--transition-base);
+}
+
+#faq details[open] summary::after {
+    transform: rotate(45deg);
+}
+
+#faq details[open] summary {
+    color: var(--terracotta-light);
+}
+
+#faq summary:hover {
+    color: var(--terracotta-light);
+}
+
+#faq details p {
+    padding: 0 var(--space-md) var(--space-md);
+    color: var(--chocolate-soft);
+    font-size: 0.95rem;
+}
+
+/* Abertura do <details> animada (progressiva) */
+@supports (interpolate-size: allow-keywords) {
+    :root {
+        interpolate-size: allow-keywords;
+    }
+
+    #faq details::details-content {
+        block-size: 0;
+        overflow: clip;
+        transition:
+            block-size var(--transition-base),
+            content-visibility var(--transition-base) allow-discrete;
+    }
+
+    #faq details[open]::details-content {
+        block-size: auto;
+    }
+}
+
+/* Depoimentos */
+#depoimentos {
+    background: var(--cream-deep);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--gold);
+}
+
+#depoimentos h3 {
+    margin-bottom: var(--space-sm);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--gold-muted);
+}
+
+blockquote {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--chocolate);
+    line-height: 1.6;
+    position: relative;
+    padding-left: var(--space-md);
+}
+
+blockquote::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+}
+
+/* ============================================================
+   CADASTRO PAGE
+   ============================================================ */
+
+main>h1 {
+    margin-bottom: var(--space-xs);
+}
+
+main>h1+p {
+    color: var(--chocolate-soft);
+    margin-bottom: var(--space-xl);
+    font-size: 1.05rem;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+fieldset {
+    border: none;
+    padding: var(--space-lg);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    transition: box-shadow var(--transition-base);
+}
+
+fieldset:hover {
+    box-shadow: var(--shadow-card);
+}
+
+legend {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--terracotta-light);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-xs);
+    border-bottom: 2px solid var(--border-subtle);
+    width: 100%;
+}
+
+/* Form fields */
+.campo {
+    margin-bottom: var(--space-md);
+}
+
+.campo:last-child {
+    margin-bottom: 0;
+}
+
+.campo label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--chocolate);
+    margin-bottom: 6px;
+}
+
+.campo input[type="text"],
+.campo input[type="email"],
+.campo input[type="tel"],
+.campo input[type="date"],
+.campo select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--chocolate);
+    background: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    outline: none;
+    transition:
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+}
+
+.campo input:hover,
+.campo select:hover {
+    border-color: rgba(243, 233, 219, 0.14);
+}
+
+.campo input:focus,
+.campo select:focus {
+    outline: none;
+    border-color: var(--terracotta);
+    background: var(--input-bg-focus);
+    box-shadow: var(--focus-ring);
+}
+
+.campo input::placeholder {
+    color: #8f7c66;
+    font-weight: 300;
+}
+
+.campo small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--sage-light);
+    font-weight: 400;
+}
+
+/* Campo inválido (só após interação) */
+.campo input:user-invalid,
+.campo select:user-invalid {
+    border-color: var(--error);
+    background: rgba(224, 122, 95, 0.08);
+}
+
+.campo input:not(:placeholder-shown):invalid {
+    border-color: var(--error);
+}
+
+/* Campo válido (feedback de sucesso, só após preenchimento)
+   BUG CORRIGIDO: a cláusula ":not([value=\"\"])" no <select> nunca
+   funcionou como pretendido — [value=""] é um seletor de ATRIBUTO
+   HTML literal, e <select> não reflete a opção escolhida como um
+   atributo "value" na própria tag (isso é uma propriedade do DOM,
+   não um atributo do HTML). Na prática, essa cláusula nunca casava
+   com nada e não filtrava coisa alguma — o feedback de sucesso já
+   funcionava por conta só da pseudo-classe :valid (que SIM reflete
+   corretamente o estado de validação, considerando o "required" e
+   a option inicial com "disabled"). A cláusula morta foi removida. */
+.campo input:not(:placeholder-shown):valid,
+.campo select:valid {
+    border-color: var(--sage);
+    background: rgba(122, 156, 122, 0.08);
+}
+
+/* ----------------------------------------------------------
+   Estados controlados via JavaScript (validacao.js)
+   Complementam as pseudo-classes nativas acima: o :user-invalid
+   e o :valid dependem só das regras HTML (pattern/required), mas
+   não têm como carregar uma MENSAGEM de texto customizada — é
+   isso que as classes .campo--invalido / .campo--valido resolvem,
+   junto com o <span class="campo-erro"> injetado no DOM.
+   ---------------------------------------------------------- */
+.campo--invalido input,
+.campo--invalido select {
+    border-color: var(--error);
+    background: rgba(224, 122, 95, 0.08);
+}
+
+.campo--valido input,
+.campo--valido select {
+    border-color: var(--sage);
+    background: rgba(122, 156, 122, 0.08);
+}
+
+.campo-erro {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--error);
+    font-weight: 500;
+}
+
+.campo-erro::before {
+    content: "⚠ ";
+}
+
+/* Select */
+.campo select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23cbb9a5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+/* Checkboxes */
+.campo:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--input-bg);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-base);
+}
+
+.campo:has(input[type="checkbox"]):hover {
+    background: var(--input-bg-focus);
+}
+
+.campo input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.campo:has(input[type="checkbox"]) label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+/* Submit button */
+button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff8f0;
+    background: var(--terracotta);
+    border: none;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(212, 105, 74, 0.4);
+    transition:
+        transform var(--transition-bounce),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
+    align-self: flex-start;
+}
+
+button[type="submit"]:hover {
+    background: var(--terracotta-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(212, 105, 74, 0.5);
+}
+
+button[type="submit"]:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring), 0 4px 20px rgba(212, 105, 74, 0.4);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 12px rgba(212, 105, 74, 0.35);
+}
+
+button[type="submit"]:disabled {
+    background: var(--chocolate-soft);
+    color: rgba(255, 248, 240, 0.6);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ============================================================
+   COMPONENTES DE FEEDBACK
+   Badges, Alerts, Toasts e Modal — mesma paleta "Terra & Afeto"
+   ============================================================ */
+
+/* ---------- Badge ---------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+
+.badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.badge-sucesso {
+    background: rgba(122, 156, 122, 0.16);
+    color: var(--sage-light);
+}
+
+.badge-info {
+    background: rgba(212, 105, 74, 0.16);
+    color: var(--terracotta-light);
+}
+
+.badge-alerta {
+    background: rgba(224, 122, 95, 0.16);
+    color: var(--gold);
+}
+
+/* ---------- Alert ---------- */
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border-left: 4px solid transparent;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+}
+
+.alert-icone {
+    flex-shrink: 0;
+    font-weight: 700;
+}
+
+.alert-info {
+    background: rgba(212, 105, 74, 0.08);
+    border-left-color: var(--terracotta);
+    color: var(--cream);
+}
+
+.alert-sucesso {
+    background: rgba(122, 156, 122, 0.1);
+    border-left-color: var(--sage);
+    color: var(--cream);
+}
+
+.alert-erro {
+    background: rgba(224, 122, 95, 0.1);
+    border-left-color: var(--error);
+    color: var(--cream);
+}
+
+/* ---------- Toast (checkbox hack — sem JavaScript) ---------- */
+.toast-trigger {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.toast-abrir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-pill);
+    background: var(--cream-deep);
+    border: 1px solid var(--border-subtle);
+    color: var(--cream);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color var(--transition-base);
+}
+
+.toast-abrir:hover {
+    border-color: var(--terracotta);
+}
+
+.toast {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    max-width: 320px;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--cream-deep);
+    box-shadow: var(--shadow-card);
+    border-left: 4px solid var(--sage);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition:
+        opacity var(--transition-base),
+        transform var(--transition-base),
+        visibility var(--transition-base);
+    z-index: 200;
+}
+
+.toast-trigger:checked~.toast,
+.toast.mostrar {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.toast-titulo {
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.15rem;
+}
+
+.toast-texto {
+    font-size: 0.85rem;
+    color: var(--chocolate-soft);
+}
+
+.toast-fechar {
+    margin-left: auto;
+    cursor: pointer;
+    color: var(--chocolate-soft);
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+/* ---------- Modal (checkbox hack — sem JavaScript) ---------- */
+.modal-trigger {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.modal-abrir {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--terracotta-light);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 10, 6, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+    z-index: 300;
+}
+
+.modal-trigger:checked~.modal-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--cream-deep);
+    border-radius: var(--radius-lg);
+    max-width: 480px;
+    width: 100%;
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-16px);
+    transition: transform var(--transition-base);
+}
+
+.modal-trigger:checked~.modal-overlay .modal {
+    transform: translateY(0);
+}
+
+.modal-fechar {
+    display: block;
+    text-align: right;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: var(--chocolate-soft);
+    margin-bottom: var(--space-sm);
+}
+
+.modal h3 {
+    margin-bottom: var(--space-sm);
+}
+
+.modal p {
+    color: var(--chocolate-soft);
+    margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   ACESSIBILIDADE MOVIMENTO REDUZIDO
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    section {
+        content-visibility: visible;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+    :root {
+        --header-height: 64px;
+    }
+
+    header {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .menu-toggle-label {
+        display: flex;
+    }
+
+    header nav {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        max-height: 0;
+        overflow: hidden;
+        background: rgba(26, 18, 12, 0.97);
+        backdrop-filter: blur(12px);
+        transition: max-height var(--transition-base);
+    }
+
+    .menu-toggle:checked~nav {
+        max-height: 400px;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+
+    header nav a {
+        font-size: 0.95rem;
+        width: 100%;
+    }
+
+    .tem-submenu .submenu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        background: transparent;
+        display: none;
+        padding-left: var(--space-md);
+        margin-top: var(--space-xs);
+    }
+
+    .tem-submenu:focus-within .submenu {
+        display: block;
+    }
+
+    .menu-toggle:checked~.menu-toggle-label span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-toggle:checked~.menu-toggle-label span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle:checked~.menu-toggle-label span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    main {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    #chamada-acao a {
+        display: block;
+        margin: 0 0 var(--space-xs);
+    }
+
+    #seja-voluntario ul {
+        flex-direction: column;
+    }
+
+    #seja-voluntario li {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --space-lg: 1.5rem;
+        --space-xl: 2.5rem;
+        --space-2xl: 3.5rem;
+    }
+
+    main {
+        padding: var(--space-md) var(--space-sm);
+    }
+
+    fieldset {
+        padding: var(--space-md);
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        align-self: stretch;
+    }
+}
+
+/* ============================================================
+   PRINT força tema claro (economia de tinta)
+   ============================================================ */
+
+@media print {
+
+    header,
+    footer,
+    body::before {
+        display: none !important;
+    }
+
+    body {
+        background: #ffffff;
+        color: #1a110a;
+    }
+
+    main {
+        padding: 0;
+        max-width: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    a,
+    address p,
+    summary {
+        color: #1a110a !important;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    address a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+    }
+
+    #missao,
+    #como-doar,
+    aside,
+    fieldset,
+    #projetos-andamento article,
+    #faq details,
+    #seja-voluntario li {
+        background: #ffffff !important;
+        color: #1a110a;
+        border: 1px solid #cccccc;
+        box-shadow: none;
+    }
+
+    .campo input,
+    .campo select {
+        background: #ffffff;
+        color: #1a110a;
+        border: 1px solid #999999;
+    }
+
+    section,
+    fieldset,
+    #projetos-andamento article {
+        break-inside: avoid;
+        content-visibility: visible;
+    }
+}
