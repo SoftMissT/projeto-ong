@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nossos Projetos - ONG Mãos Solidárias</title>
+    <meta
+      name="description"
+      content="Conheça os projetos da ONG Mãos Solidárias e descubra como doar ou se tornar voluntário."
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <img src="imagens/logo-ong.png" alt="Logotipo da ONG Mãos Solidárias" />
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="projetos.html" aria-current="page">Projetos</a></li>
+          <li><a href="cadastro.html">Cadastro</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Nossos Projetos</h1>
+
+      <section id="projetos-andamento">
+        <h2>Projetos em Andamento</h2>
+
+        <article>
+          <h3>Educação para Todos</h3>
+          <span class="badge badge-sucesso">Vagas abertas</span>
+          <img
+            src="imagens/projeto-educacao.jpg"
+            alt="Crianças participando de aula de reforço escolar em centro comunitário"
+          />
+          <p>
+            Reforço escolar gratuito para crianças de 6 a 14 anos em situação de
+            vulnerabilidade.
+          </p>
+
+          <input type="checkbox" id="modal-educacao" class="modal-trigger" />
+          <label for="modal-educacao" class="modal-abrir">Ver detalhes</label>
+
+          <div class="modal-overlay">
+            <div class="modal">
+              <label
+                for="modal-educacao"
+                class="modal-fechar"
+                aria-label="Fechar"
+                >&times;</label
+              >
+              <h3>Educação para Todos</h3>
+              <p>
+                Aulas de reforço escolar (português e matemática) três vezes por
+                semana, no período da tarde, para crianças de 6 a 14 anos
+                encaminhadas por escolas parceiras da região.
+              </p>
+              <span class="badge badge-sucesso"
+                >Vagas abertas para voluntários</span
+              >
+            </div>
+          </div>
+        </article>
+
+        <article>
+          <h3>Alimentação Solidária</h3>
+          <span class="badge badge-info">Mensal</span>
+          <img
+            src="imagens/projeto-alimentacao.jpg"
+            alt="Voluntários preparando cestas básicas para distribuição"
+          />
+          <p>
+            Distribuição mensal de cestas básicas para famílias cadastradas na
+            comunidade.
+          </p>
+        </article>
+
+        <article>
+          <h3>Geração de Renda</h3>
+          <span class="badge badge-alerta">Poucas vagas</span>
+          <img
+            src="imagens/projeto-renda.jpg"
+            alt="Mulheres participando de oficina de costura profissionalizante"
+          />
+          <p>
+            Cursos profissionalizantes gratuitos para geração de renda familiar.
+          </p>
+        </article>
+      </section>
+
+      <section id="como-doar">
+        <h2>Como Doar</h2>
+        <p>
+          Sua doação sustenta diretamente os projetos acima. Cadastre-se como
+          colaborador para saber como contribuir.
+        </p>
+        <a href="cadastro.html">Quero Doar</a>
+
+        <input type="checkbox" id="toast-demo" class="toast-trigger" />
+        <label for="toast-demo" class="toast-abrir"
+          >Ver exemplo de notificação</label
+        >
+
+        <div class="toast">
+          <div>
+            <p class="toast-titulo">Cadastro enviado!</p>
+            <p class="toast-texto">
+              Obrigado por colaborar com a ONG Mãos Solidárias.
+            </p>
+          </div>
+          <label
+            for="toast-demo"
+            class="toast-fechar"
+            aria-label="Fechar notificação"
+            >&times;</label
+          >
+        </div>
+      </section>
+
+      <section id="seja-voluntario">
+        <h2>Seja Voluntário</h2>
+        <ul>
+          <li>Reforço escolar</li>
+          <li>Distribuição de alimentos</li>
+          <li>Oficinas profissionalizantes</li>
+        </ul>
+        <a href="cadastro.html">Quero ser Voluntário</a>
+      </section>
+
+      <section id="faq">
+        <h2>Perguntas Frequentes</h2>
+
+        <details>
+          <summary>Como funciona a doação?</summary>
+          <p>
+            As doações são recebidas via transferência bancária ou
+            presencialmente na sede.
+          </p>
+        </details>
+
+        <details>
+          <summary>Recebo certificado como voluntário?</summary>
+          <p>
+            Sim, emitimos certificado de horas após 20h de atividade voluntária.
+          </p>
+        </details>
+
+        <details>
+          <summary>Quanto tempo dura o voluntariado?</summary>
+          <p>
+            Não há tempo mínimo obrigatório; você define sua disponibilidade no
+            cadastro.
+          </p>
+        </details>
+      </section>
+
+      <aside id="depoimentos">
+        <h3>Depoimentos</h3>
+        <blockquote>
+          <p>"A ONG mudou a rotina da minha família."</p>
+        </blockquote>
+      </aside>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>

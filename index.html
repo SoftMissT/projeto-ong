@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ONG Mãos Solidárias</title>
+    <meta
+      name="description"
+      content="ONG Mãos Solidárias - apoio a famílias em situação de vulnerabilidade social por meio de educação, alimentação e geração de renda."
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <!--
+      Day.js — biblioteca de manipulação de datas (via CDN, sem NPM).
+      Carregada em 3 partes:
+        1) núcleo da biblioteca
+        2) plugin relativeTime (habilita o método .fromNow())
+        3) locale pt-br (traduz a saída para português)
+      A ordem importa: os plugins e o locale precisam ser registrados
+      DEPOIS que o núcleo já existe no escopo global (window.dayjs).
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script>
+      // Registra o plugin (habilita dayjs().fromNow()) e ativa o
+      // idioma português — feito uma única vez, aqui no shell,
+      // antes de qualquer script próprio do projeto rodar.
+      dayjs.extend(dayjs_plugin_relativeTime);
+      dayjs.locale("pt-br");
+    </script>
+  </head>
+  <body>
+    <header>
+      <img
+        src="../imagens/logo-ong.png"
+        alt="Logotipo da ONG Mãos Solidárias"
+      />
+
+      <input type="checkbox" id="menu-toggle" class="menu-toggle" />
+      <label
+        for="menu-toggle"
+        class="menu-toggle-label"
+        aria-label="Abrir menu de navegação"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+
+      <nav>
+        <ul>
+          <li><a href="/" data-link aria-current="page">Início</a></li>
+          <li class="tem-submenu">
+            <a href="/projetos" data-link>Projetos</a>
+            <ul class="submenu">
+              <li>
+                <a href="/projetos#projetos-andamento" data-link
+                  >Projetos em Andamento</a
+                >
+              </li>
+              <li><a href="/projetos#como-doar" data-link>Como Doar</a></li>
+              <li>
+                <a href="/projetos#seja-voluntario" data-link
+                  >Seja Voluntário</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li><a href="/cadastro" data-link>Cadastro</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!--
+      Este é o único container de conteúdo "dinâmico" da aplicação.
+      O router.js troca o innerHTML deste elemento a cada navegação —
+      nada fora dele (header, footer) é recriado.
+    -->
+    <main id="app"></main>
+
+    <footer>
+      <p>&copy; 2026 ONG Mãos Solidárias. Todos os direitos reservados.</p>
+    </footer>
+
+    <!--
+      Ordem de carregamento importa aqui:
+      1) validacao.js define window.initMascaras antes de routes.js
+         precisar referenciá-la.
+      2) routes.js define window.routes antes do router.js precisar
+         consultar esse mapa.
+      3) router.js é o último: assim que carrega, já executa a
+         renderização inicial (renderRoute no fim do arquivo), então
+         precisa que tudo acima já exista.
+    -->
+    <!--
+      Um único ponto de entrada. router.js declara
+      `import { routes } from './routes.js'`, que por sua vez
+      declara `import { initMascaras } from './validacao.js'` e
+      `import { obterCadastros } from './armazenamento.js'` — o
+      navegador resolve essa árvore de imports sozinho, buscando
+      cada arquivo só uma vez, na ordem certa, sem precisarmos
+      listar manualmente 4 <script> em sequência como antes.
+
+      type="module" é obrigatório aqui: é o que HABILITA o uso de
+      import/export nesse arquivo (e em toda a árvore importada por
+      ele). Sem esse atributo, o navegador trataria import/export
+      como erro de sintaxe.
+    -->
+    <script type="module" src="../js/router.js"></script>
+  </body>
+</html>
